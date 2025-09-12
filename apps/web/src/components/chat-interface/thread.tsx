@@ -5,7 +5,6 @@ import { ThreadPrimitive } from "@assistant-ui/react";
 import { Thread as ThreadType } from "@langchain/langgraph-sdk";
 import { ArrowDownIcon, PanelRightOpen, SquarePen } from "lucide-react";
 import { Dispatch, FC, SetStateAction } from "react";
-import { ReflectionsDialog } from "../reflections-dialog/ReflectionsDialog";
 import { useLangSmithLinkToolUI } from "../tool-hooks/LangSmithLinkToolUI";
 import { TooltipIconButton } from "../ui/assistant-ui/tooltip-icon-button";
 import { TighterText } from "../ui/header";
@@ -56,7 +55,7 @@ export const Thread: FC<ThreadProps> = (props: ThreadProps) => {
   const {
     graphData: { clearState, runId, feedbackSubmitted, setFeedbackSubmitted },
   } = useGraphContext();
-  const { selectedAssistant } = useAssistantContext();
+  const { selectedAssistant: _selectedAssistant } = useAssistantContext();
   const {
     modelName,
     setModelName,
@@ -97,7 +96,7 @@ export const Thread: FC<ThreadProps> = (props: ThreadProps) => {
           <ThreadHistory
             switchSelectedThreadCallback={switchSelectedThreadCallback}
           />
-          <TighterText className="text-xl">Open Canvas</TighterText>
+          <TighterText className="text-xl">EXACODE Canvas</TighterText>
           {!hasChatStarted && (
             <ModelSelector
               modelName={modelName}
@@ -129,11 +128,7 @@ export const Thread: FC<ThreadProps> = (props: ThreadProps) => {
               <SquarePen className="text-gray-600" />
             </TooltipIconButton>
           </div>
-        ) : (
-          <div className="flex flex-row gap-2 items-center">
-            <ReflectionsDialog selectedAssistant={selectedAssistant} />
-          </div>
-        )}
+        ) : null}
       </div>
       <ThreadPrimitive.Viewport className="flex-1 overflow-y-auto scroll-smooth bg-inherit px-4 pt-8">
         {!hasChatStarted && (

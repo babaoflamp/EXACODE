@@ -12,6 +12,20 @@ export function useRuns() {
     });
 
     if (!res.ok) {
+      // Log the error details for debugging
+      try {
+        const errorData = await res.json();
+        console.error('Failed to share run:', {
+          status: res.status,
+          statusText: res.statusText,
+          error: errorData
+        });
+      } catch (parseError) {
+        console.error('Failed to share run (could not parse error response):', {
+          status: res.status,
+          statusText: res.statusText
+        });
+      }
       return;
     }
 

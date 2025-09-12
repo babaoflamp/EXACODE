@@ -246,14 +246,14 @@ function ArtifactRendererComponent(props: ArtifactRendererProps) {
     } catch (e) {
       console.error("Failed to get artifact selection", e);
     }
-  }, [isSelectionActive, selectionBox]);
+  }, [isSelectionActive, selectionBox, artifact]);
 
   useEffect(() => {
     if (!!selectedBlocks && !isSelectionActive) {
       // Selection is not active but selected blocks are present. Clear them.
       setSelectedBlocks(undefined);
     }
-  }, [selectedBlocks, isSelectionActive]);
+  }, [selectedBlocks, isSelectionActive, setSelectedBlocks]);
 
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {

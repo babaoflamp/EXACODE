@@ -8,7 +8,7 @@ import {
   DialogTrigger,
 } from "../ui/dialog";
 import { Button } from "../ui/button";
-import { BrainCog, Loader } from "lucide-react";
+import { Loader } from "lucide-react";
 import { ConfirmClearDialog } from "./ConfirmClearDialog";
 import { TooltipIconButton } from "../ui/assistant-ui/tooltip-icon-button";
 import { TighterText } from "../ui/header";
@@ -79,7 +79,7 @@ export function ReflectionsDialog(props: ReflectionsDialogProps) {
       return;
 
     getReflections(selectedAssistant.assistant_id);
-  }, [selectedAssistant]);
+  }, [selectedAssistant, getReflections]);
 
   const handleDelete = async () => {
     if (!selectedAssistant) {
@@ -102,12 +102,16 @@ export function ReflectionsDialog(props: ReflectionsDialogProps) {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <TooltipIconButton
-          tooltip="Reflections"
+          tooltip="EXACODE CANVAS"
           variant="ghost"
           className="w-fit h-fit p-2"
           onClick={() => setOpen(true)}
         >
-          <BrainCog className="w-6 h-6 text-gray-600" />
+          <img
+            src="/EXACODE_Canvas.png"
+            alt="EXACODE Canvas Logo"
+            className="w-8 h-8 rounded-full object-cover"
+          />
         </TooltipIconButton>
       </DialogTrigger>
       <DialogContent className="max-w-xl p-8 bg-white rounded-lg shadow-xl">

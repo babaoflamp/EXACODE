@@ -2,8 +2,8 @@ import { CustomModelConfig, ModelConfigurationParams } from "./types.js";
 
 const AZURE_MODELS: ModelConfigurationParams[] = [
   {
-    name: "azure/gpt-4o-mini",
-    label: "GPT-4o mini (Azure)",
+    name: "azure/gpt-4.1-nano",
+    label: "Azure OpenAI",
     isNew: false,
     config: {
       provider: "azure_openai",
@@ -23,6 +23,71 @@ const AZURE_MODELS: ModelConfigurationParams[] = [
   },
 ];
 
+const EXACODE_MODELS: ModelConfigurationParams[] = [
+  {
+    name: "exacode/chat-exacode-think",
+    label: "Chat-EXACODE-Think",
+    isNew: false,
+    config: {
+      provider: "openai",
+      temperatureRange: {
+        min: 0,
+        max: 1,
+        default: 0.5,
+        current: 0.5,
+      },
+      maxTokens: {
+        min: 1,
+        max: 8_192,
+        default: 4_096,
+        current: 4_096,
+      },
+    },
+  },
+  {
+    name: "exacode/chat-exacode-a",
+    label: "Chat-EXACODE-A",
+    isNew: false,
+    config: {
+      provider: "openai",
+      temperatureRange: {
+        min: 0,
+        max: 1,
+        default: 0.5,
+        current: 0.5,
+      },
+      maxTokens: {
+        min: 1,
+        max: 8_192,
+        default: 4_096,
+        current: 4_096,
+      },
+    },
+  },
+  {
+    name: "exacode/chat-exacode-b",
+    label: "Chat-EXACODE-B",
+    isNew: false,
+    config: {
+      provider: "openai",
+      temperatureRange: {
+        min: 0,
+        max: 1,
+        default: 0.5,
+        current: 0.5,
+      },
+      maxTokens: {
+        min: 1,
+        max: 8_192,
+        default: 4_096,
+        current: 4_096,
+      },
+    },
+  },
+];
+
+// Commented out unused models to avoid TypeScript errors
+/*
 const OPENAI_MODELS: ModelConfigurationParams[] = [
   {
     name: "gpt-4.1",
@@ -205,10 +270,12 @@ const OPENAI_MODELS: ModelConfigurationParams[] = [
     isNew: false,
   },
 ];
+*/
 
 /**
  * Ollama model names _MUST_ be prefixed with `"ollama-"`
  */
+/*
 const OLLAMA_MODELS = [
   {
     name: "ollama-llama3.3",
@@ -231,7 +298,9 @@ const OLLAMA_MODELS = [
     isNew: false,
   },
 ];
+*/
 
+/*
 const ANTHROPIC_MODELS = [
   {
     name: "claude-sonnet-4-0",
@@ -354,7 +423,9 @@ const ANTHROPIC_MODELS = [
     isNew: false,
   },
 ];
+*/
 
+/*
 const FIREWORKS_MODELS: ModelConfigurationParams[] = [
   {
     name: "accounts/fireworks/models/llama-v3p3-70b-instruct",
@@ -437,7 +508,9 @@ const FIREWORKS_MODELS: ModelConfigurationParams[] = [
     isNew: false,
   },
 ];
+*/
 
+/*
 const GROQ_MODELS: ModelConfigurationParams[] = [
   {
     name: "groq/deepseek-r1-distill-llama-70b",
@@ -460,7 +533,9 @@ const GROQ_MODELS: ModelConfigurationParams[] = [
     isNew: false,
   },
 ];
+*/
 
+/*
 const GEMINI_MODELS: ModelConfigurationParams[] = [
   {
     name: "gemini-2.5-flash-preview-05-20",
@@ -563,6 +638,7 @@ const GEMINI_MODELS: ModelConfigurationParams[] = [
     isNew: false,
   },
 ];
+*/
 
 export const LANGCHAIN_USER_ONLY_MODELS = [
   "o1",
@@ -605,35 +681,61 @@ export const THINKING_MODELS = [
   "groq/deepseek-r1-distill-llama-70b",
 ];
 
-export const ALL_MODELS: ModelConfigurationParams[] = [
-  ...OPENAI_MODELS,
-  ...ANTHROPIC_MODELS,
-  ...FIREWORKS_MODELS,
-  ...GEMINI_MODELS,
-  ...AZURE_MODELS,
-  ...OLLAMA_MODELS,
-  ...GROQ_MODELS,
+// Add back Fireworks models for Llama access
+const FIREWORKS_MODELS_LLAMA: ModelConfigurationParams[] = [
+  {
+    name: "accounts/fireworks/models/llama-v3p3-70b-instruct",
+    label: "Llama 3.3 70B (Free)",
+    config: {
+      provider: "fireworks",
+      temperatureRange: {
+        min: 0,
+        max: 1,
+        default: 0.5,
+        current: 0.5,
+      },
+      maxTokens: {
+        min: 1,
+        max: 16_384,
+        default: 4_096,
+        current: 4_096,
+      },
+    },
+    isNew: false,
+  },
 ];
 
-type OPENAI_MODEL_NAMES = (typeof OPENAI_MODELS)[number]["name"];
-type ANTHROPIC_MODEL_NAMES = (typeof ANTHROPIC_MODELS)[number]["name"];
-type FIREWORKS_MODEL_NAMES = (typeof FIREWORKS_MODELS)[number]["name"];
-type GEMINI_MODEL_NAMES = (typeof GEMINI_MODELS)[number]["name"];
-type AZURE_MODEL_NAMES = (typeof AZURE_MODELS)[number]["name"];
-type OLLAMA_MODEL_NAMES = (typeof OLLAMA_MODELS)[number]["name"];
-type GROQ_MODEL_NAMES = (typeof GROQ_MODELS)[number]["name"];
-export type ALL_MODEL_NAMES =
-  | OPENAI_MODEL_NAMES
-  | ANTHROPIC_MODEL_NAMES
-  | FIREWORKS_MODEL_NAMES
-  | GEMINI_MODEL_NAMES
-  | AZURE_MODEL_NAMES
-  | OLLAMA_MODEL_NAMES
-  | GROQ_MODEL_NAMES;
+export const ALL_MODELS: ModelConfigurationParams[] = [
+  ...AZURE_MODELS,
+  ...EXACODE_MODELS,
+  ...FIREWORKS_MODELS_LLAMA,
+  // Commented out other models
+  // ...OPENAI_MODELS,
+  // ...ANTHROPIC_MODELS,
+  // ...GEMINI_MODELS,
+  // ...OLLAMA_MODELS,
+  // ...GROQ_MODELS,
+];
 
-export const DEFAULT_MODEL_NAME: ALL_MODEL_NAMES = OPENAI_MODELS[1].name;
+type AZURE_MODEL_NAMES = (typeof AZURE_MODELS)[number]["name"];
+type EXACODE_MODEL_NAMES = (typeof EXACODE_MODELS)[number]["name"];
+type FIREWORKS_LLAMA_MODEL_NAMES = (typeof FIREWORKS_MODELS_LLAMA)[number]["name"];
+// Commented out unused model types
+// type OPENAI_MODEL_NAMES = (typeof OPENAI_MODELS)[number]["name"];
+// type ANTHROPIC_MODEL_NAMES = (typeof ANTHROPIC_MODELS)[number]["name"];
+// type FIREWORKS_MODEL_NAMES = (typeof FIREWORKS_MODELS)[number]["name"];
+// type GEMINI_MODEL_NAMES = (typeof GEMINI_MODELS)[number]["name"];
+// type OLLAMA_MODEL_NAMES = (typeof OLLAMA_MODELS)[number]["name"];
+// type GROQ_MODEL_NAMES = (typeof GROQ_MODELS)[number]["name"];
+export type ALL_MODEL_NAMES =
+  | AZURE_MODEL_NAMES
+  | EXACODE_MODEL_NAMES
+  | FIREWORKS_LLAMA_MODEL_NAMES;
+
+// Use EXACODE model as default due to Azure OpenAI configuration issues
+export const DEFAULT_MODEL_NAME: ALL_MODEL_NAMES = EXACODE_MODELS[0].name; // exacode/chat-exacode-think
 export const DEFAULT_MODEL_CONFIG: CustomModelConfig = {
-  ...OPENAI_MODELS[1].config,
-  temperatureRange: { ...OPENAI_MODELS[1].config.temperatureRange },
-  maxTokens: { ...OPENAI_MODELS[1].config.maxTokens },
+  ...EXACODE_MODELS[0].config,
+  temperatureRange: { ...EXACODE_MODELS[0].config.temperatureRange },
+  maxTokens: { ...EXACODE_MODELS[0].config.maxTokens },
 };

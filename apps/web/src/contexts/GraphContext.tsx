@@ -38,6 +38,7 @@ import {
   Dispatch,
   ReactNode,
   SetStateAction,
+  useCallback,
   useContext,
   useEffect,
   useRef,
@@ -158,7 +159,7 @@ export function GraphProvider({ children }: { children: ReactNode }) {
     ) {
       assistantsData.getOrCreateAssistant(userData.user.id);
     }
-  }, [userData.user]);
+  }, [userData.user, assistantsData]);
 
   // Very hacky way of ensuring updateState is not called when a thread is switched
   useEffect(() => {
@@ -205,7 +206,7 @@ export function GraphProvider({ children }: { children: ReactNode }) {
       // We need to update
       debouncedAPIUpdate(artifact, threadData.threadId);
     }
-  }, [artifact, threadData.threadId]);
+  }, [artifact, threadData.threadId, debouncedAPIUpdate, isStreaming, messages.length, threadSwitched, updateRenderedArtifactRequired]);
 
   const searchOrCreateEffectRan = useRef(false);
 
@@ -235,7 +236,7 @@ export function GraphProvider({ children }: { children: ReactNode }) {
       // Failed to fetch thread. Remove from query params
       threadData.setThreadId(null);
     });
-  }, [threadData.threadId, userData.user]);
+  }, [threadData.threadId, userData.user, threadData]);
 
   const updateArtifact = async (
     artifactToUpdate: ArtifactV3,
@@ -1262,6 +1263,11 @@ export function GraphProvider({ children }: { children: ReactNode }) {
     if (runId) {
       // Chain `.then` to not block the stream
       shareRun(runId).then(async (sharedRunURL) => {
+        // If shareRun failed, sharedRunURL will be undefined
+        if (!sharedRunURL) {
+          console.warn('Failed to share run, skipping LangSmith tool UI');
+          return;
+        }
         setMessages((prevMessages) => {
           const newMsgs = prevMessages.map((msg) => {
             if (
@@ -1293,6 +1299,8 @@ export function GraphProvider({ children }: { children: ReactNode }) {
           });
           return newMsgs;
         });
+      }).catch((error) => {
+        console.error('Error in shareRun chain:', error);
       });
     }
   };
@@ -1348,7 +1356,7 @@ export function GraphProvider({ children }: { children: ReactNode }) {
     });
   };
 
-  const switchSelectedThread = (thread: Thread) => {
+  const switchSelectedThread = useCallback((thread: Thread) => {
     setUpdateRenderedArtifactRequired(true);
     setThreadSwitched(true);
     setChatStarted(true);
@@ -1411,7 +1419,7 @@ export function GraphProvider({ children }: { children: ReactNode }) {
         return msg as BaseMessage;
       })
     );
-  };
+  }, [threadData]);
 
   const contextValue: GraphContentType = {
     graphData: {

@@ -213,12 +213,17 @@ export const getModelConfig = (
   if (
     customModelName.includes("gpt-") ||
     customModelName.includes("o1") ||
-    customModelName.includes("o3")
+    customModelName.includes("o3") ||
+    customModelName.includes("exacode/")
   ) {
     let actualModelName = providerConfig.modelName;
     if (extra?.isToolCalling && actualModelName.includes("o1")) {
       // Fallback to 4o model for tool calling since o1 does not support tools.
       actualModelName = "gpt-4o";
+    }
+    // Handle EXACODE models - extract the actual model name
+    if (customModelName.includes("exacode/")) {
+      actualModelName = customModelName.replace("exacode/", "");
     }
     return {
       ...providerConfig,
@@ -236,7 +241,7 @@ export const getModelConfig = (
     };
   }
 
-  if (customModelName.includes("fireworks/")) {
+  if (customModelName.includes("fireworks/") || customModelName.includes("accounts/fireworks/models/")) {
     let actualModelName = providerConfig.modelName;
     if (
       extra?.isToolCalling &&

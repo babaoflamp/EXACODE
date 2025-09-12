@@ -1,39 +1,45 @@
-import { StreamWorkerMessage, StreamConfig } from "./streamWorker.types";
+import { StreamConfig } from "./streamWorker.types";
+import { createClient } from "@/hooks/utils";
 
 export class StreamWorkerService {
-  private worker: Worker;
-
   constructor() {
-    this.worker = new Worker(new URL("./stream.worker.ts", import.meta.url));
+    // Web Worker 없이 직접 스트리밍 처리
   }
 
   async *streamData(config: StreamConfig): AsyncGenerator<any, void, unknown> {
-    this.worker.postMessage(config);
+    try {
+      const { threadId, assistantId, input, modelName, modelConfigs } = config;
 
-    while (true) {
-      const event: MessageEvent<StreamWorkerMessage> = await new Promise(
-        (resolve) => {
-          this.worker.onmessage = resolve;
-        }
-      );
+      console.log('Starting stream with config:', {
+        threadId,
+        assistantId,
+        modelName,
+        inputType: typeof input
+      });
 
-      const { type, data, error } = event.data;
+      const client = createClient();
 
-      if (type === "error") {
-        throw new Error(error);
+      const stream = client.runs.stream(threadId, assistantId, {
+        input: input as Record<string, unknown>,
+        streamMode: "events",
+        config: {
+          configurable: {
+            customModelName: modelName,
+            modelConfig: modelConfigs[modelName as keyof typeof modelConfigs],
+          },
+        },
+      });
+
+      for await (const chunk of stream) {
+        yield chunk;
       }
-
-      if (type === "chunk" && data) {
-        yield JSON.parse(data);
-      }
-
-      if (type === "done") {
-        break;
-      }
+    } catch (error: any) {
+      console.error('Stream error:', error);
+      throw new Error(`Streaming failed: ${error.message}`);
     }
   }
 
   terminate() {
-    this.worker.terminate();
+    // Web Worker 없으므로 아무것도 하지 않음
   }
 }

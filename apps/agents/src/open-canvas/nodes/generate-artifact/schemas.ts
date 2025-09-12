@@ -12,6 +12,7 @@ export const ARTIFACT_TOOL_SCHEMA = z.object({
         ...string[],
       ]
     )
+    .nullable()
     .optional()
     .describe(
       "The language/programming language of the artifact generated.\n" +
@@ -20,6 +21,7 @@ export const ARTIFACT_TOOL_SCHEMA = z.object({
     ),
   isValidReact: z
     .boolean()
+    .nullable()
     .optional()
     .describe(
       "Whether or not the generated code is valid React code. Only populate this field if generating code."

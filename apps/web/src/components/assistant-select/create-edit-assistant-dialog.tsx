@@ -152,7 +152,7 @@ export function CreateEditAssistantDialog(
       setDocuments(undefined);
       setUrls([]);
     }
-  }, [props.assistant, props.isEditing]);
+  }, [props.assistant, props.isEditing, getContextDocuments, metadata?.description, metadata?.iconData?.iconColor, metadata?.iconData?.iconName, setDocuments, setLoadingDocuments, setProcessedContextDocuments, setUrls]);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();

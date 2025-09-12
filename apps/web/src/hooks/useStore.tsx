@@ -3,7 +3,7 @@ import {
   Reflections,
   ContextDocument,
 } from "@opencanvas/shared/types";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { useToast } from "./use-toast";
 import { Item } from "@langchain/langgraph-sdk";
 import { CONTEXT_DOCUMENTS_NAMESPACE } from "@opencanvas/shared/constants";
@@ -16,7 +16,7 @@ export function useStore() {
     Reflections & { assistantId: string; updatedAt: Date }
   >();
 
-  const getReflections = async (assistantId: string): Promise<void> => {
+  const getReflections = useCallback(async (assistantId: string): Promise<void> => {
     setIsLoadingReflections(true);
     const res = await fetch("/api/store/get", {
       method: "POST",
@@ -62,7 +62,7 @@ export function useStore() {
       assistantId,
     });
     setIsLoadingReflections(false);
-  };
+  }, []);
 
   const deleteReflections = async (assistantId: string): Promise<boolean> => {
     const res = await fetch("/api/store/delete", {
@@ -92,7 +92,7 @@ export function useStore() {
     return success;
   };
 
-  const getCustomQuickActions = async (
+  const getCustomQuickActions = useCallback(async (
     userId: string
   ): Promise<CustomQuickAction[] | undefined> => {
     setIsLoadingQuickActions(true);
@@ -120,7 +120,7 @@ export function useStore() {
     } finally {
       setIsLoadingQuickActions(false);
     }
-  };
+  }, []);
 
   const deleteCustomQuickAction = async (
     id: string,
@@ -257,7 +257,7 @@ export function useStore() {
     }
   };
 
-  const getContextDocuments = async (
+  const getContextDocuments = useCallback(async (
     assistantId: string
   ): Promise<ContextDocument[] | undefined> => {
     const res = await fetch("/api/store/get", {
@@ -286,7 +286,7 @@ export function useStore() {
     }
 
     return item?.value?.documents;
-  };
+  }, []);
 
   return {
     isLoadingReflections,

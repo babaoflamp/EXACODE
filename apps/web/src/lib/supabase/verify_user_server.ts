@@ -5,14 +5,26 @@ export async function verifyUserAuthenticated(): Promise<
   { user: User; session: Session } | undefined
 > {
   const supabase = createClient();
+  
+  // Use getUser() which authenticates against the Supabase Auth server
   const {
     data: { user },
+    error: userError,
   } = await supabase.auth.getUser();
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-  if (!user || !session) {
+  
+  if (userError || !user) {
     return undefined;
   }
+
+  // Only get session after confirming user is authenticated
+  const {
+    data: { session },
+    error: sessionError,
+  } = await supabase.auth.getSession();
+  
+  if (sessionError || !session) {
+    return undefined;
+  }
+  
   return { user, session };
 }

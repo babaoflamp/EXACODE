@@ -34,13 +34,13 @@ const toolbarOptions: ToolbarOption[] = [
   },
   {
     id: "addLogs",
-    tooltip: "Add logs",
+    tooltip: "Code Review",
     icon: <ScrollText className="w-[26px] h-[26px]" />,
     component: null,
   },
   {
     id: "portLanguage",
-    tooltip: "Port language",
+    tooltip: "Code Refactoring",
     icon: <BookA className="w-[26px] h-[26px]" />,
     component: (
       props: SharedComponentProps & { language: ProgrammingLanguageOptions }
@@ -48,7 +48,7 @@ const toolbarOptions: ToolbarOption[] = [
   },
   {
     id: "fixBugs",
-    tooltip: "Fix bugs",
+    tooltip: "Unit Test",
     icon: <Bug className="w-[26px] h-[26px]" />,
     component: null,
   },
@@ -141,7 +141,7 @@ export function CodeToolBar(props: CodeToolbarProps) {
                   tooltip={option.tooltip}
                   variant="ghost"
                   className="transition-colors w-[36px] h-[36px]"
-                  delayDuration={400}
+                  delayDuration={100}
                   onClick={async (e) => await handleOptionClick(e, option.id)}
                 >
                   {option.icon}
@@ -162,7 +162,7 @@ export function CodeToolBar(props: CodeToolbarProps) {
               ? "cursor-default opacity-50 text-gray-400 hover:bg-background"
               : "cursor-pointer"
           )}
-          delayDuration={400}
+          delayDuration={100}
         >
           <Code
             className={cn(

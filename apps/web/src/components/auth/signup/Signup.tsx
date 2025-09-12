@@ -69,11 +69,12 @@ export function Signup() {
         <div className="absolute inset-0 bg-zinc-900" />
         <div className="relative z-20 flex gap-1 items-center text-lg font-medium">
           <NextImage
-            src="/lc_logo.jpg"
+            src="/EXACODE_Canvas.png"
             width={36}
             height={36}
-            alt="LangChain Logo"
+            alt="EXACODE Canvas Logo"
             className="rounded-full"
+            style={{ width: 'auto', height: 'auto' }}
           />
           Open Canvas
         </div>

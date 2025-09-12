@@ -3,6 +3,7 @@ import {
   Dialog,
   DialogContent,
   DialogHeader,
+  DialogTitle,
   DialogDescription,
   DialogTrigger,
 } from "../ui/dialog";
@@ -26,6 +27,9 @@ export function ConfirmClearDialog(props: ReflectionsProps) {
       </DialogTrigger>
       <DialogContent className="max-w-xl p-8 bg-white rounded-lg shadow-xl">
         <DialogHeader>
+          <DialogTitle className="text-center text-xl font-semibold text-gray-800">
+            Clear Reflections
+          </DialogTitle>
           <DialogDescription className="mt-2 text-md text-center font-light text-red-500">
             <TighterText>
               Are you sure you want to clear all reflections? This action can

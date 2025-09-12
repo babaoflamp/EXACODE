@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { CustomQuickAction } from "@opencanvas/shared/types";
 import { NewCustomQuickActionDialog } from "./NewCustomQuickActionDialog";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useStore } from "@/hooks/useStore";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
@@ -102,15 +102,15 @@ export function CustomQuickActions(props: CustomQuickActionsProps) {
     setIsEditingId(id);
   };
 
-  const getAndSetCustomQuickActions = async (userId: string) => {
+  const getAndSetCustomQuickActions = useCallback(async (userId: string) => {
     const actions = await getCustomQuickActions(userId);
     setCustomQuickActions(actions);
-  };
+  }, [getCustomQuickActions]);
 
   useEffect(() => {
     if (typeof window === undefined || !assistantId || !user) return;
     getAndSetCustomQuickActions(user.id);
-  }, [assistantId, user]);
+  }, [assistantId, user, getAndSetCustomQuickActions]);
 
   const handleNewActionClick = (e: Event) => {
     e.preventDefault();

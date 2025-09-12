@@ -25,12 +25,44 @@ async function shareRunWithRetry(
 }
 
 export async function POST(req: NextRequest) {
-  const { runId } = await req.json();
+  let runId: string;
+  
+  try {
+    const body = await req.json();
+    runId = body.runId;
+    
+    console.log('Sharing run request:', { runId });
 
-  if (!runId) {
+    if (!runId) {
+      console.error('Missing runId in request');
+      return new NextResponse(
+        JSON.stringify({
+          error: "`runId` is required to share run.",
+        }),
+        {
+          status: 400,
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+    }
+
+    if (!process.env.LANGSMITH_API_KEY) {
+      console.error('LANGSMITH_API_KEY is not configured');
+      return new NextResponse(
+        JSON.stringify({
+          error: "LANGSMITH_API_KEY is not configured.",
+        }),
+        {
+          status: 500,
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+    }
+  } catch (parseError) {
+    console.error('Failed to parse request body:', parseError);
     return new NextResponse(
       JSON.stringify({
-        error: "`runId` is required to share run.",
+        error: "Invalid request body.",
       }),
       {
         status: 400,
@@ -40,10 +72,11 @@ export async function POST(req: NextRequest) {
   }
 
   const lsClient = new Client({
-    apiKey: process.env.LANGCHAIN_API_KEY,
+    apiKey: process.env.LANGSMITH_API_KEY,
   });
 
   try {
+    console.log('Attempting to share run with LangSmith:', { runId });
     const sharedRunURL = await shareRunWithRetry(lsClient, runId);
 
     return new NextResponse(JSON.stringify({ sharedRunURL }), {
@@ -55,8 +88,16 @@ export async function POST(req: NextRequest) {
       `Failed to share run with id ${runId} after ${MAX_RETRIES} attempts:\n`,
       error
     );
+    
+    // Extract more specific error information
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    
     return new NextResponse(
-      JSON.stringify({ error: "Failed to share run after multiple attempts." }),
+      JSON.stringify({ 
+        error: "Failed to share run after multiple attempts.", 
+        details: errorMessage,
+        runId: runId 
+      }),
       {
         status: 500,
         headers: { "Content-Type": "application/json" },

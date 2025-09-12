@@ -1,11 +1,12 @@
 import { ALL_MODEL_NAMES } from "@opencanvas/shared/models";
 import { CustomModelConfig, GraphInput } from "@opencanvas/shared/types";
 
-export interface StreamWorkerMessage {
-  type: "chunk" | "done" | "error";
-  data?: string;
-  error?: string;
-}
+// Web Worker를 사용하지 않으므로 더 이상 필요하지 않음
+// export interface StreamWorkerMessage {
+//   type: "chunk" | "done" | "error";
+//   data?: string;
+//   error?: string;
+// }
 
 export interface StreamConfig {
   threadId: string;

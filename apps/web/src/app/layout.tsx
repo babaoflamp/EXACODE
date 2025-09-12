@@ -9,7 +9,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Open Canvas",
+  title: "EXACODE Canvas",
   description: "Open Canvas Chat UX by LangChain",
 };
 

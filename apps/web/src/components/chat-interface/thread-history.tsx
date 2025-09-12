@@ -208,7 +208,7 @@ export function ThreadHistoryComponent(props: ThreadHistoryProps) {
     if (typeof window == "undefined" || userThreads.length || !user) return;
 
     getUserThreads();
-  }, [user]);
+  }, [user, getUserThreads, userThreads.length]);
 
   const handleDeleteThread = async (id: string) => {
     if (!user) {

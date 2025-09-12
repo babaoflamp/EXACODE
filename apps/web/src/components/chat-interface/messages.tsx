@@ -120,8 +120,19 @@ export const AssistantMessage: FC<AssistantMessageProps> = ({
 
   return (
     <MessagePrimitive.Root className="relative grid w-full max-w-2xl grid-cols-[auto_auto_1fr] grid-rows-[auto_1fr] py-4">
-      <Avatar className="col-start-1 row-span-full row-start-1 mr-4">
-        <AvatarFallback>A</AvatarFallback>
+      <Avatar className="col-start-1 row-span-full row-start-1 mr-4 bg-white border border-gray-200">
+        <img
+          src="/EXACODE_Canvas.png"
+          alt="EXACODE Canvas Logo"
+          className="w-10 h-10 object-contain p-1"
+        />
+        <AvatarFallback className="bg-white">
+          <img
+            src="/EXACODE_Canvas.png"
+            alt="EXACODE Canvas Logo"
+            className="w-10 h-10 object-contain p-1"
+          />
+        </AvatarFallback>
       </Avatar>
 
       <div className="text-foreground col-span-2 col-start-2 row-start-1 my-1.5 max-w-xl break-words leading-7">
