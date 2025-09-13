@@ -7,7 +7,7 @@ import { ArrowDownIcon, PanelRightOpen, SquarePen } from "lucide-react";
 import { Dispatch, FC, SetStateAction } from "react";
 import { useLangSmithLinkToolUI } from "../tool-hooks/LangSmithLinkToolUI";
 import { TooltipIconButton } from "../ui/assistant-ui/tooltip-icon-button";
-import { TighterText } from "../ui/header";
+// import { TighterText } from "../ui/header"; // 현재 사용되지 않음
 import { Composer } from "./composer";
 import { AssistantMessage, UserMessage } from "./messages";
 import ModelSelector from "./model-selector";
@@ -96,7 +96,6 @@ export const Thread: FC<ThreadProps> = (props: ThreadProps) => {
           <ThreadHistory
             switchSelectedThreadCallback={switchSelectedThreadCallback}
           />
-          <TighterText className="text-xl">EXACODE Canvas</TighterText>
           {!hasChatStarted && (
             <ModelSelector
               modelName={modelName}

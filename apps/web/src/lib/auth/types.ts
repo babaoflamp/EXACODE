@@ -1,13 +1,43 @@
 // 인증 관련 타입 정의
+import { AUTH_CONSTANTS } from './constants';
+
+export type AuthMethod = typeof AUTH_CONSTANTS.AUTH_METHODS[keyof typeof AUTH_CONSTANTS.AUTH_METHODS];
 
 export interface AuthUser {
   id: string;
   email: string;
   name: string;
-  authMethod: 'supabase' | 'sso' | 'ldap';
+  authMethod: AuthMethod;
   employeeId?: string;
   department?: string;
   groups?: string[];
+}
+
+export interface AuthResult {
+  success: boolean;
+  user?: AuthUser;
+  error?: string;
+}
+
+export interface TokenVerificationResult {
+  success: boolean;
+  user?: AuthUser;
+  error?: string;
+  expired?: boolean;
+}
+
+export interface CookieConfig {
+  httpOnly: boolean;
+  secure: boolean;
+  sameSite: 'strict' | 'lax' | 'none';
+  path: string;
+  maxAge: number;
+}
+
+export interface LogoutResponse {
+  success: boolean;
+  message?: string;
+  error?: string;
 }
 
 export interface SSOResponse {

@@ -7,6 +7,7 @@ import { Input } from "../../ui/input";
 import { Button } from "../../ui/button";
 import { Icons } from "../../ui/icons";
 import { Label } from "../../ui/label";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../../ui/tooltip";
 import { LoginWithEmailInput } from "./Login";
 import { useState } from "react";
 import { PasswordInput } from "../../ui/password-input";
@@ -32,6 +33,8 @@ export function UserAuthForm({
   const [isClearing, setIsClearing] = useState(false);
   const [isCreatingCookie, setIsCreatingCookie] = useState(false);
   const [isTestLogin, setIsTestLogin] = useState(false);
+  const [isSsoChecking, setIsSsoChecking] = useState(false);
+  const [isLdapChecking, setIsLdapChecking] = useState(false);
   const _router = useRouter();
 
   const isLoading =
@@ -159,11 +162,10 @@ export function UserAuthForm({
           console.log('파싱된 결과:', result);
           
           if (result.success) {
-            console.log('로그인 성공 사용자 정보:', result.user);
-            alert(`${result.user.name}님으로 로그인되었습니다!`);
+            console.log('테스트 로그인 성공:', result.user.email);
             
-            // 페이지 새로고침하여 인증 상태 반영
-            window.location.reload();
+            // 메인 페이지로 리다이렉트 (팝업 없이 바로 이동)
+            window.location.href = '/';
           } else {
             throw new Error(result.error || '쿠키 로그인 실패');
           }
@@ -185,8 +187,81 @@ export function UserAuthForm({
     setIsTestLogin(false);
   };
 
+  // SSO 연동 확인 핸들러
+  const handleSsoCheck = async () => {
+    setIsSsoChecking(true);
+    try {
+      console.log('SSO 연동 상태 확인 중...');
+      
+      // SSO 연동 확인 API 호출 (예시)
+      const response = await fetch('/api/auth/sso/check', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        console.log('SSO 연동 확인 결과:', result);
+        alert(`SSO 연동 상태: ${result.success ? '정상' : '오류'}\n${result.message || ''}`);
+      } else {
+        // API가 없는 경우 기본 확인 로직
+        console.log('SSO API 없음 - 기본 확인 로직 실행');
+        
+        // SSO 쿠키 확인
+        const ssoCookie = document.cookie
+          .split('; ')
+          .find(row => row.startsWith('ssoId='));
+        
+        if (ssoCookie) {
+          alert('SSO 연동 상태: 정상\nSSO 쿠키가 존재합니다.');
+        } else {
+          alert('SSO 연동 상태: 오류\nSSO 쿠키가 없습니다.');
+        }
+      }
+    } catch (error) {
+      console.error('SSO 연동 확인 실패:', error);
+      alert('SSO 연동 확인 중 오류가 발생했습니다.');
+    }
+    setIsSsoChecking(false);
+  };
+
+  // LDAP 연동 확인 핸들러
+  const handleLdapCheck = async () => {
+    setIsLdapChecking(true);
+    try {
+      console.log('LDAP 연동 상태 확인 중...');
+      
+      // LDAP 연동 확인 API 호출 (예시)
+      const response = await fetch('/api/auth/ldap/check', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        console.log('LDAP 연동 확인 결과:', result);
+        alert(`LDAP 연동 상태: ${result.success ? '정상' : '오류'}\n${result.message || ''}`);
+      } else {
+        // API가 없는 경우 기본 확인 로직
+        console.log('LDAP API 없음 - 기본 확인 로직 실행');
+        
+        // LDAP 관련 환경변수나 설정 확인 (예시)
+        alert('LDAP 연동 상태: 미구현\nLDAP 연동 확인 로직이 필요합니다.');
+      }
+    } catch (error) {
+      console.error('LDAP 연동 확인 실패:', error);
+      alert('LDAP 연동 확인 중 오류가 발생했습니다.');
+    }
+    setIsLdapChecking(false);
+  };
+
   return (
     <div className={cn("grid gap-6", className)} {...props}>
+
       <form onSubmit={onSubmit}>
         <div className="grid gap-2">
           <div className="grid gap-1">
@@ -294,6 +369,73 @@ export function UserAuthForm({
               ) : null}
               쿠키 삭제
             </Button>
+          </div>
+          
+          {/* SSO/LDAP 연동 확인 버튼들 */}
+          <div className="border-t pt-3 mt-3">
+            <div className="text-xs text-gray-500 text-center font-medium mb-2">연동 상태 확인</div>
+            <TooltipProvider>
+              <div className="flex gap-2">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      onClick={handleSsoCheck}
+                      variant="outline"
+                      size="sm"
+                      type="button"
+                      disabled={isSsoChecking}
+                      className="flex-1"
+                    >
+                      {isSsoChecking ? (
+                        <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                      ) : null}
+                      SSO 연동 확인
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="bottom" className="max-w-xs">
+                    <div className="text-left space-y-1">
+                      <div className="font-medium">SSO 연동 정보</div>
+                      <div className="text-xs space-y-0.5">
+                        <div><span className="font-medium">서버:</span> sso.lge.com</div>
+                        <div><span className="font-medium">경로:</span> /agentless/seoul/exacodeAngeless.jsp</div>
+                        <div><span className="font-medium">쿠키:</span> ssoId</div>
+                        <div><span className="font-medium">상태:</span> 활성화</div>
+                      </div>
+                    </div>
+                  </TooltipContent>
+                </Tooltip>
+
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      onClick={handleLdapCheck}
+                      variant="outline"
+                      size="sm"
+                      type="button"
+                      disabled={isLdapChecking}
+                      className="flex-1"
+                    >
+                      {isLdapChecking ? (
+                        <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                      ) : null}
+                      LDAP 연동 확인
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="bottom" className="max-w-xs">
+                    <div className="text-left space-y-1">
+                      <div className="font-medium">LDAP 연동 정보</div>
+                      <div className="text-xs space-y-0.5">
+                        <div><span className="font-medium">서버:</span> lgesaads01.lge.net</div>
+                        <div><span className="font-medium">포트:</span> 636 (LDAPS)</div>
+                        <div><span className="font-medium">계정:</span> exacode@lge.com</div>
+                        <div><span className="font-medium">기준DN:</span> OU=LGE Users,dc=LGE,dc=NET</div>
+                        <div><span className="font-medium">상태:</span> 활성화</div>
+                      </div>
+                    </div>
+                  </TooltipContent>
+                </Tooltip>
+              </div>
+            </TooltipProvider>
           </div>
         </div>
       )}

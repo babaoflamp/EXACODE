@@ -1,197 +1,195 @@
-# Open Canvas
+# ExaCode Canvas
 
-[TRY IT OUT HERE](https://opencanvas.langchain.com/)
+ExaCode Canvas는 AI 에이전트와 협업하여 문서를 작성하고 편집할 수 있는 오픈소스 웹 애플리케이션입니다. OpenAI의 "Canvas"에서 영감을 받았지만, 몇 가지 주요한 차이점이 있습니다.
 
-![Screenshot of app](./static/screenshot.png)
+1. **오픈소스**: 프론트엔드부터 콘텐츠 생성 에이전트, 반성 에이전트까지 모든 코드가 오픈소스이며 MIT 라이선스입니다.
+2. **내장 메모리**: ExaCode Canvas는 반성 에이전트와 함께 제공되며, 스타일 규칙과 사용자 인사이트를 공유 메모리 저장소에 저장합니다. 이를 통해 세션을 넘나들며 사용자에 대한 정보를 기억할 수 있습니다.
+3. **기존 문서에서 시작**: 빈 텍스트나 원하는 언어의 코드 에디터에서 시작할 수 있어, 채팅 상호작용으로 강제 시작하는 대신 기존 콘텐츠로 시작할 수 있습니다.
 
-Open Canvas is an open source web application for collaborating with agents to better write documents. It is inspired by [OpenAI's "Canvas"](https://openai.com/index/introducing-canvas/), but with a few key differences.
+## 주요 기능
 
-1. **Open Source**: All the code, from the frontend, to the content generation agent, to the reflection agent is open source and MIT licensed.
-2. **Built in memory**: Open Canvas ships out of the box with a [reflection agent](https://langchain-ai.github.io/langgraphjs/tutorials/reflection/reflection/) which stores style rules and user insights in a [shared memory store](https://langchain-ai.github.io/langgraphjs/concepts/memory/). This allows Open Canvas to remember facts about you across sessions.
-3. **Start from existing documents**: Open Canvas allows users to start with a blank text, or code editor in the language of their choice, allowing you to start the session with your existing content, instead of being forced to start with a chat interaction. We believe this is an ideal UX because many times you will already have some content to start with, and want to iterate on-top of it.
+- **메모리**: 자동으로 사용자와 채팅 기록에 대한 반성과 기억을 생성하는 내장 메모리 시스템. 이후 채팅 상호작용에서 이를 포함하여 더 개인화된 경험을 제공합니다.
+- **사용자 정의 빠른 작업**: 사용자에게 연결되고 세션 간에 지속되는 자체 프롬프트를 정의할 수 있습니다. 한 번의 클릭으로 쉽게 호출하여 현재 보고 있는 아티팩트에 적용할 수 있습니다.
+- **사전 구축 빠른 작업**: 일반적인 글쓰기 및 코딩 작업을 위한 사전 구축된 빠른 작업 시리즈가 항상 사용 가능합니다.
+- **아티팩트 버전 관리**: 모든 아티팩트에 "버전"이 연결되어 있어 시간을 되돌려 아티팩트의 이전 버전을 볼 수 있습니다.
+- **코드, 마크다운, 또는 둘 다**: 아티팩트 보기에서 코드와 마크다운 모두 보고 편집할 수 있습니다.
+- **실시간 마크다운 렌더링 및 편집**: 편집하는 동안 렌더링된 마크다운을 볼 수 있어 전환할 필요가 없습니다.
 
-## Features
+## 로컬 설정
 
-- **Memory**: Open Canvas has a built in memory system which will automatically generate reflections and memories on you, and your chat history. These are then included in subsequent chat interactions to give a more personalized experience.
-- **Custom quick actions**: Custom quick actions allow you to define your own prompts which are tied to your user, and persist across sessions. These then can be easily invoked through a single click, and apply to the artifact you're currently viewing.
-- **Pre-built quick actions**: There are also a series of pre-built quick actions for common writing and coding tasks that are always available.
-- **Artifact versioning**: All artifacts have a "version" tied to them, allowing you to travel back in time and see previous versions of your artifact.
-- **Code, Markdown, or both**: The artifact view allows for viewing and editing both code, and markdown. You can even have chats which generate code, and markdown artifacts, and switch between them.
-- **Live markdown rendering & editing**: Open Canvas's markdown editor allows you to view the rendered markdown while you're editing, without having to toggle back and fourth.
+이 가이드는 ExaCode Canvas를 로컬에서 설정하고 실행하는 방법을 다룹니다.
 
-## Setup locally
+### 사전 요구사항
 
-This guide will cover how to setup and run Open Canvas locally. If you prefer a YouTube video guide, check out [this video](https://youtu.be/sBzcQYPMekc).
+ExaCode Canvas는 다음 API 키와 외부 서비스가 필요합니다:
 
-### Prerequisites
-
-Open Canvas requires the following API keys and external services:
-
-#### Package Manager
+#### 패키지 매니저
 
 - [Yarn](https://yarnpkg.com/)
 
-#### APIs
+#### API 키들
 
-- [OpenAI API key](https://platform.openai.com/signup/)
-- [Anthropic API key](https://console.anthropic.com/)
-- (optional) [Google GenAI API key](https://aistudio.google.com/apikey)
-- (optional) [Fireworks AI API key](https://fireworks.ai/login)
-- (optional) [Groq AI API key](https://groq.com) - audio/video transcription
-- (optional) [FireCrawl API key](https://firecrawl.dev) - web scraping
-- (optional) [ExaSearch API key](https://exa.ai) - web search
+- [OpenAI API 키](https://platform.openai.com/signup/)
+- [Anthropic API 키](https://console.anthropic.com/)
+- (선택사항) [Google GenAI API 키](https://aistudio.google.com/apikey)
+- (선택사항) [Fireworks AI API 키](https://fireworks.ai/login)
+- (선택사항) [Groq AI API 키](https://groq.com) - 오디오/비디오 전사
+- (선택사항) [FireCrawl API 키](https://firecrawl.dev) - 웹 스크래핑
+- (선택사항) [ExaSearch API 키](https://exa.ai) - 웹 검색
 
+#### 인증
 
-#### Authentication
+- 인증을 위한 [Supabase](https://supabase.com/) 계정
 
-- [Supabase](https://supabase.com/) account for authentication
+#### LangGraph 서버
 
-#### LangGraph Server
-
-- [LangGraph CLI](https://langchain-ai.github.io/langgraph/cloud/reference/cli/) for running the graph locally
+- 그래프를 로컬에서 실행하기 위한 [LangGraph CLI](https://langchain-ai.github.io/langgraph/cloud/reference/cli/)
 
 #### LangSmith
 
-- [LangSmith](https://smith.langchain.com/) for tracing & observability
+- 추적 및 관찰성을 위한 [LangSmith](https://smith.langchain.com/)
 
-### Installation
+### 설치
 
-First, clone the repository:
+먼저 리포지토리를 클론합니다:
 
 ```bash
 git clone https://github.com/langchain-ai/open-canvas.git
 cd open-canvas
 ```
 
-Next, install the dependencies:
+다음으로 의존성을 설치합니다:
 
 ```bash
 yarn install
 ```
 
-After installing dependencies, copy the contents of both `.env.example` files in the root of the project, and in `apps/web` into `.env` and set the required values:
+의존성 설치 후, 프로젝트 루트와 `apps/web`에 있는 `.env.example` 파일들을 `.env`로 복사하고 필수 값들을 설정합니다:
 
 ```bash
-# The root `.env` file will be read by the LangGraph server for the agents.
+# 루트 .env 파일은 에이전트를 위한 LangGraph 서버에서 읽힙니다.
 cp .env.example .env
 ```
 
 ```bash
-# The `apps/web/.env` file will be read by the frontend.
+# apps/web/.env 파일은 프론트엔드에서 읽힙니다.
 cd apps/web/
 cp .env.example .env
 ```
 
-Then, setup authentication with Supabase.
+그런 다음 Supabase로 인증을 설정합니다.
 
-### Setup Authentication
+### 인증 설정
 
-After creating a Supabase account, visit your [dashboard](https://supabase.com/dashboard/projects) and create a new project.
+Supabase 계정을 생성한 후, [대시보드](https://supabase.com/dashboard/projects)를 방문하여 새 프로젝트를 만듭니다.
 
-Next, navigate to the `Project Settings` page inside your project, and then to the `API` tag. Copy the `Project URL`, and `anon public` project API key. Paste them into the `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` environment variables in the `apps/web/.env` file.
+다음으로, 프로젝트 내의 `Project Settings` 페이지로 이동한 후 `API` 탭으로 이동합니다. `Project URL`과 `anon public` 프로젝트 API 키를 복사합니다. 이를 `apps/web/.env` 파일의 `NEXT_PUBLIC_SUPABASE_URL`과 `NEXT_PUBLIC_SUPABASE_ANON_KEY` 환경변수에 붙여넣습니다.
 
-After this, navigate to the `Authentication` page, and the `Providers` tab. Make sure `Email` is enabled (also ensure you've enabled `Confirm Email`). You may also enable `GitHub`, and/or `Google` if you'd like to use those for authentication. (see these pages for documentation on how to setup each provider: [GitHub](https://supabase.com/docs/guides/auth/social-login/auth-github), [Google](https://supabase.com/docs/guides/auth/social-login/auth-google))
+이후 `Authentication` 페이지와 `Providers` 탭으로 이동합니다. `Email`이 활성화되어 있는지 확인합니다 (`Confirm Email`도 활성화했는지 확인). 원한다면 `GitHub` 및/또는 `Google`도 인증에 사용할 수 있습니다.
 
-#### Test authentication
+#### 인증 테스트
 
-To verify authentication works, run `yarn dev` and visit [localhost:3000](http://localhost:3000). This should redirect you to the [login page](http://localhost:3000/auth/login). From here, you can either login with Google or GitHub, or if you did not configure these providers, navigate to the [signup page](http://localhost:3000/auth/signup) and create a new account with an email and password. This should then redirect you to a conformation page, and after confirming your email you should be redirected to the [home page](http://localhost:3000).
+인증이 작동하는지 확인하려면 `yarn dev`를 실행하고 [localhost:3000](http://localhost:3000)을 방문합니다. 이는 [로그인 페이지](http://localhost:3000/auth/login)로 리다이렉트되어야 합니다. 여기서 Google이나 GitHub로 로그인하거나, 이러한 제공자를 구성하지 않았다면 [가입 페이지](http://localhost:3000/auth/signup)로 이동하여 이메일과 비밀번호로 새 계정을 만들 수 있습니다.
 
-### Setup LangGraph Server
+### LangGraph 서버 설정
 
-The first step to running Open Canvas locally is to build the application. This is because Open Canvas uses a monorepo setup, and requires workspace dependencies to be build so other packages/apps can access them.
+ExaCode Canvas를 로컬에서 실행하는 첫 번째 단계는 애플리케이션을 빌드하는 것입니다. 이는 ExaCode Canvas가 모노레포 설정을 사용하며, 다른 패키지/앱이 액세스할 수 있도록 워크스페이스 의존성을 빌드해야 하기 때문입니다.
 
-Run the following command from the root of the repository:
+리포지토리 루트에서 다음 명령을 실행합니다:
 
 ```bash
 yarn build
 ```
 
-Now we'll cover how to setup and run the LangGraph server locally.
+이제 LangGraph 서버를 로컬에서 설정하고 실행하는 방법을 다루겠습니다.
 
-Navigate to `apps/agents` and run `yarn dev` (this runs `npx @langchain/langgraph-cli dev --port 54367`).
+`apps/agents`로 이동하여 `yarn dev`를 실행합니다 (`npx @langchain/langgraph-cli dev --port 54367` 실행):
 
 ```
 Ready!
-- 🚀 API: http://localhost:54367
-- 🎨 Studio UI: https://smith.langchain.com/studio?baseUrl=http://localhost:54367
+- API: http://localhost:54367
+- Studio UI: https://smith.langchain.com/studio?baseUrl=http://localhost:54367
 ```
 
-After your LangGraph server is running, execute the following command inside `apps/web` to start the Open Canvas frontend:
+LangGraph 서버가 실행된 후, `apps/web` 내에서 다음 명령을 실행하여 ExaCode Canvas 프론트엔드를 시작합니다:
 
 ```bash
 yarn dev
 ```
 
-On initial load, compilation may take a little bit of time.
+초기 로드 시 컴파일에 약간의 시간이 걸릴 수 있습니다.
 
-Then, open [localhost:3000](http://localhost:3000) with your browser and start interacting!
+그런 다음 브라우저에서 [localhost:3000](http://localhost:3000)을 열고 상호작용을 시작하세요!
 
-## LLM Models
+## LLM 모델
 
-Open Canvas is designed to be compatible with any LLM model. The current deployment has the following models configured:
+ExaCode Canvas는 모든 LLM 모델과 호환되도록 설계되었습니다. 현재 배포에는 다음 모델들이 구성되어 있습니다:
 
-- **Anthropic Claude 3 Haiku 👤**: Haiku is Anthropic's fastest model, great for quick tasks like making edits to your document. Sign up for an Anthropic account [here](https://console.anthropic.com/).
-- **Fireworks Llama 3 70B 🦙**: Llama 3 is a SOTA open source model from Meta, powered by [Fireworks AI](https://fireworks.ai/). You can sign up for an account [here](https://fireworks.ai/login).
-- **OpenAI GPT 4o Mini 💨**: GPT 4o Mini is OpenAI's newest, smallest model. You can sign up for an API key [here](https://platform.openai.com/signup/).
+- **Anthropic Claude 3 Haiku**: Anthropic의 가장 빠른 모델로, 문서 편집 같은 빠른 작업에 적합합니다.
+- **Fireworks Llama 3 70B**: Meta의 SOTA 오픈소스 모델로, Fireworks AI에서 제공됩니다.
+- **OpenAI GPT 4o Mini**: OpenAI의 최신, 가장 작은 모델입니다.
 
-If you'd like to add a new model, follow these simple steps:
+새 모델을 추가하고 싶다면 다음 간단한 단계를 따르세요:
 
-1. Add to or update the model provider variables in `packages/shared/src/models.ts`.
-2. Install the necessary package for the provider (e.g. `@langchain/anthropic`) inside `apps/agents`.
-3. Update the `getModelConfig` function in `apps/agents/src/agent/utils.ts` to include an `if` statement for your new model name and provider.
-4. Manually test by checking you can:
-   > - 4a. Generate a new artifact
-   > - 4b. Generate a followup message (happens automatically after generating an artifact)
-   > - 4c. Update an artifact via a message in chat
-   > - 4d. Update an artifact via a quick action
-   > - 4e. Repeat for text/code (ensure both work)
+1. `packages/shared/src/models.ts`에서 모델 제공자 변수를 추가하거나 업데이트합니다.
+2. `apps/agents` 내에 제공자를 위한 필요한 패키지를 설치합니다 (예: `@langchain/anthropic`).
+3. `apps/agents/src/agent/utils.ts`의 `getModelConfig` 함수를 업데이트하여 새 모델 이름과 제공자를 위한 `if` 문을 포함합니다.
+4. 다음을 확인할 수 있는지 수동으로 테스트합니다:
+   > - 4a. 새 아티팩트 생성
+   > - 4b. 후속 메시지 생성 (아티팩트 생성 후 자동으로 발생)
+   > - 4c. 채팅의 메시지를 통한 아티팩트 업데이트
+   > - 4d. 빠른 작업을 통한 아티팩트 업데이트
+   > - 4e. 텍스트/코드에 대해 반복 (둘 다 작동하는지 확인)
 
-### Local Ollama models
+### 로컬 Ollama 모델
 
-Open Canvas supports calling local LLMs running on Ollama. This is not enabled in the hosted version of Open Canvas, but you can use this in your own local/deployed Open Canvas instance.
+ExaCode Canvas는 Ollama에서 실행되는 로컬 LLM 호출을 지원합니다. 이는 호스팅된 버전의 ExaCode Canvas에서는 활성화되지 않지만, 자체 로컬/배포된 ExaCode Canvas 인스턴스에서 사용할 수 있습니다.
 
-To use a local Ollama model, first ensure you have [Ollama](https://ollama.com) installed, and a model that supports tool calling pulled (the default model is `llama3.3`).
+로컬 Ollama 모델을 사용하려면, 먼저 [Ollama](https://ollama.com)가 설치되어 있고 도구 호출을 지원하는 모델이 풀되어 있는지 확인합니다 (기본 모델은 `llama3.3`입니다).
 
-Next, start the Ollama server by running `ollama run llama3.3`.
+다음으로 `ollama run llama3.3`을 실행하여 Ollama 서버를 시작합니다.
 
-Then, set the `NEXT_PUBLIC_OLLAMA_ENABLED` environment variable to `true`, and the `OLLAMA_API_URL` environment variable to the URL of your Ollama server (defaults to `http://host.docker.internal:11434`. If you do not set a custom port when starting your Ollama server, you should not need to set this environment variable).
+그런 다음 `NEXT_PUBLIC_OLLAMA_ENABLED` 환경변수를 `true`로 설정하고, `OLLAMA_API_URL` 환경변수를 Ollama 서버의 URL로 설정합니다 (기본값은 `http://host.docker.internal:11434`).
 
-> [!NOTE]
-> Open source LLMs are typically not as good at instruction following as proprietary models like GPT-4o or Claude Sonnet. Because of this, you may experience errors or unexpected behavior when using local LLMs.
+## SSO 및 LDAP 연동 (ExaCode Canvas 전용)
 
-## Troubleshooting
+ExaCode Canvas는 LG전자 내부 시스템과의 연동을 지원합니다:
 
-Below are some common issues you may run into if running Open Canvas yourself:
+### SSO 연동
+- **서버**: sso.lge.com
+- **쿠키**: ssoId
+- **테스트 계정**: exacode@lge.com
 
-- **I have the LangGraph server running successfully, and my client can make requests, but no text is being generated:** This can happen if you start & connect to multiple different LangGraph servers locally in the same browser. Try clearing the `oc_thread_id_v2` cookie and refreshing the page. This is because each unique LangGraph server has its own database where threads are stored, so a thread ID from one server will not be found in the database of another server.
+### LDAP 연동
+- **서버**: lgesaads01.lge.net:636
+- **프로토콜**: LDAPS
+- **기준 DN**: OU=LGE Users,dc=LGE,dc=NET
 
-- **I'm getting 500 network errors when I try to make requests on the client:** Ensure you have the LangGraph server running, and you're making requests to the correct port. You can specify the port to use by passing the `--port <PORT>` flag to the `npx @langchain/langgraph-cli dev` command, and you can set the URL to make requests to by either setting the `LANGGRAPH_API_URL` environment variable, or by changing the fallback value of the `LANGGRAPH_API_URL` variable in `constants.ts`.
+### 연동 테스트
+로그인 페이지의 개발자 도구에서 "SSO 연동 확인" 및 "LDAP 연동 확인" 버튼을 사용하여 연동 상태를 확인할 수 있습니다.
 
-- **I'm getting "thread ID not found" error toasts when I try to make requests on the client:** Ensure you have the LangGraph server running, and you're making requests to the correct port. You can specify the port to use by passing the `--port <PORT>` flag to the `npx @langchain/langgraph-cli dev` command, and you can set the URL to make requests to by either setting the `LANGGRAPH_API_URL` environment variable, or by changing the fallback value of the `LANGGRAPH_API_URL` variable in `constants.ts`.
+## 서버 이전
 
-- **`Model name is missing in config.` error is being thrown when I make requests:** This error occurs when the `customModelName` is not specified in the config. You can resolve this by setting the `customModelName` field inside `config.configurable` to the name of the model you want to use when invoking the graph. See [this doc](https://langchain-ai.github.io/langgraphjs/how-tos/configuration/) on how to use configurable fields in LangGraph.
+다른 서버로 이전하려면 `docs/` 폴더의 배포 스크립트를 사용하세요:
 
-## Roadmap
+```bash
+# 새 서버로 배포
+./docs/scripts/deploy.sh <새_IP_주소> [새_도메인]
 
-### Features
+# 연동 테스트
+./docs/scripts/quick-test.sh
+```
 
-Below is a list of features we'd like to add to Open Canvas in the near future:
+자세한 내용은 `docs/deployment-plan.md`와 `docs/scripts/README.md`를 참조하세요.
 
-- **Render React in the editor**: Ideally, if you have Open Canvas generate React (or HTML) code, we should be able to render it live in the editor. **Edit**: This is in the planning stage now!
-- **Multiple assistants**: Users should be able to create multiple assistants, each having their own memory store.
-- **Give assistants custom 'tools'**: Once we've implemented `RemoteGraph` in LangGraph.js, users should be able to give assistants access to call their own graphs as tools. This means you could customize your assistant to have access to current events, your own personal knowledge graph, etc.
+## 문제 해결
 
-Do you have a feature request? Please [open an issue](https://github.com/langchain-ai/open-canvas/issues/new)!
+ExaCode Canvas를 직접 실행할 때 발생할 수 있는 일반적인 문제들:
 
-### Contributing
+- **LangGraph 서버가 성공적으로 실행되고 클라이언트가 요청할 수 있지만 텍스트가 생성되지 않음**: 동일한 브라우저에서 여러 다른 LangGraph 서버를 시작하고 연결한 경우 발생할 수 있습니다. `oc_thread_id_v2` 쿠키를 삭제하고 페이지를 새로고침해 보세요.
 
-We'd like to continue developing and improving Open Canvas, and want your help!
+- **클라이언트에서 요청을 시도할 때 500 네트워크 오류가 발생함**: LangGraph 서버가 실행 중인지 확인하고 올바른 포트로 요청하고 있는지 확인하세요.
 
-To start, there are a handful of GitHub issues with feature requests outlining improvements and additions to make the app's UX even better.
-There are three main labels:
+- **클라이언트에서 요청을 시도할 때 "thread ID not found" 오류 토스트가 발생함**: LangGraph 서버가 실행 중인지 확인하고 올바른 포트로 요청하고 있는지 확인하세요.
 
-- `frontend`: This label is added to issues which are UI focused, and do not require much if any work on the agent(s).
-- `ai`: This label is added to issues which are focused on improving the LLM agent(s).
-- `fullstack`: This label is added to issues which require touching both the frontend and agent code.
-
-If you have questions about contributing, please reach out to me via email: `brace(at)langchain(dot)dev`. For general bugs/issues with the code, please [open an issue on GitHub](https://github.com/langchain-ai/open-canvas/issues/new).
+- **요청할 때 "Model name is missing in config." 오류가 발생함**: 이 오류는 구성에서 `customModelName`이 지정되지 않았을 때 발생합니다.

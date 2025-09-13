@@ -28,7 +28,10 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { cookieValue, returnUrl } = body;
     
+    console.log('SSO API 호출됨 - 쿠키 값:', cookieValue);
+    
     if (!cookieValue) {
+      console.error('SSO 쿠키 값 없음');
       return NextResponse.json(
         { error: 'SSO cookie is required' },
         { status: 400 }
@@ -36,6 +39,7 @@ export async function POST(request: NextRequest) {
     }
     
     // SSO 쿠키 검증
+    console.log('SSO 쿠키 검증 시작:', cookieValue);
     const ssoResult = await verifySSOCookie(cookieValue);
     
     if (!ssoResult.success || !ssoResult.user) {

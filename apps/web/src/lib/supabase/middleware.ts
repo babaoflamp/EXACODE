@@ -24,6 +24,63 @@ async function verifyExternalAuth(request: NextRequest) {
       }
     }
 
+    // 테스트 세션 쿠키 확인 (test_session 또는 ssoId가 테스트 값인 경우)
+    const testSession = request.cookies.get('test_session');
+    const exacodeUser = request.cookies.get('exacode_user');
+    const ssoId = request.cookies.get('ssoId');
+    
+    // 테스트 모드 감지: test_session 쿠키가 있거나 ssoId가 테스트 계정인 경우
+    const isTestMode = testSession?.value || (ssoId?.value === 'exacode@lge.com');
+    
+    if (isTestMode) {
+      console.log('미들웨어: 테스트 모드 감지됨');
+      
+      let testUser;
+      if (exacodeUser?.value) {
+        try {
+          // URL 디코딩 후 JSON 파싱
+          const decodedUser = decodeURIComponent(exacodeUser.value);
+          const userData = JSON.parse(decodedUser);
+          testUser = {
+            id: userData.employeeId || 'exacode',
+            email: userData.email,
+            name: userData.name,
+            authMethod: 'sso' as const,
+            employeeId: userData.employeeId,
+            department: userData.department
+          };
+          console.log('미들웨어: exacode_user 쿠키에서 사용자 정보 파싱 완료');
+        } catch (error) {
+          console.warn('미들웨어: 테스트 사용자 파싱 실패:', error);
+          // 파싱 실패 시 기본값 사용
+          testUser = {
+            id: 'exacode',
+            email: 'exacode@lge.com',
+            name: 'exacode',
+            authMethod: 'sso' as const,
+            employeeId: 'exacode',
+            department: '인공지능 알고리즘TP'
+          };
+        }
+      } else {
+        // exacode_user 쿠키가 없으면 기본 테스트 사용자 생성
+        testUser = {
+          id: 'exacode',
+          email: 'exacode@lge.com',
+          name: 'exacode',
+          authMethod: 'sso' as const,
+          employeeId: 'exacode',
+          department: '인공지능 알고리즘TP'
+        };
+        console.log('미들웨어: 기본 테스트 사용자 생성');
+      }
+      
+      return { 
+        method: 'test', 
+        user: testUser
+      };
+    }
+
     return null;
   } catch (error) {
     console.warn('External auth verification failed:', error);
@@ -103,7 +160,9 @@ export async function updateSession(request: NextRequest) {
   // 외부 인증 사용자 정보를 요청 헤더에 추가 (선택사항)
   if (externalAuth && !user) {
     supabaseResponse.headers.set('x-auth-method', externalAuth.method);
-    supabaseResponse.headers.set('x-auth-user', JSON.stringify(externalAuth.user));
+    // Base64로 인코딩하여 한글 문제 해결
+    const userInfo = Buffer.from(JSON.stringify(externalAuth.user), 'utf-8').toString('base64');
+    supabaseResponse.headers.set('x-auth-user', userInfo);
   }
 
   // IMPORTANT: You *must* return the supabaseResponse object as it is. If you're
